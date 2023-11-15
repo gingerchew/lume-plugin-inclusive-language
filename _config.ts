@@ -8,7 +8,10 @@ const site = lume({
 });
 
 site.use(InclusiveLanguagePlugin({
-    words: [...defaultWords, 'nincompoop']
+    words: [...defaultWords, 'nincompoop'],
+    // uncomment one of the below to test the search feature
+    // search: ['type=post']
+    // search: ['type=post', 'type=special']
 }));
 
 export default site;
