@@ -3,7 +3,7 @@ import { Data, Page, PageData, Site } from "lume/core.ts";
 import { underlineIt, warnIt } from "./utils.ts";
 import { inclusiveLanguage } from "./inclusiveLanguage.ts";
 
-interface Options {
+export interface InclusiveLanguageOptions {
     words: string[];
     search: string[];
     padding: number;
@@ -17,7 +17,7 @@ const defaults = {
     padding: 30,
 };
 
-function process(page:Page | Data<PageData>, { words, padding }:Pick<Options, 'words' | 'padding'>) {
+function process(page:Page | Data<PageData>, { words, padding }:Pick<InclusiveLanguageOptions, 'words' | 'padding'>) {
     // There has to be a way to do this better
     if ((page as Data<PageData>).page) {
         const tmpPage = (page as Data<PageData>).page;
@@ -42,7 +42,7 @@ function process(page:Page | Data<PageData>, { words, padding }:Pick<Options, 'w
 }
 
 
-function InclusiveLanguagePlugin(options?: Partial<Options>) {
+function InclusiveLanguagePlugin(options?: Partial<InclusiveLanguageOptions>) {
     let {
         words,
         search, 
@@ -50,7 +50,7 @@ function InclusiveLanguagePlugin(options?: Partial<Options>) {
     } = {
         ...defaults,
         ...options
-    } as Options;
+    } as InclusiveLanguageOptions;
 
     if (!Array.isArray(words) && typeof words === 'string') {
         const wordsStr = words as string;
