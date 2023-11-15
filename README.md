@@ -44,8 +44,5 @@ You can see the results by running `deno task lume` in your terminal.
 
 ## TODO
 
-- [ ] Find a better way to implement `templateFormats`
 - [ ] Give the code a second over (Could be preemptive)
-- [ ] Extract terminal utils into their own file
-- [ ] extract `inclusiveLanguage` func into its own file
 - [ ] Improve typing (could be preemptive)
