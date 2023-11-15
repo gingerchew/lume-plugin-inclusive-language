@@ -4,9 +4,9 @@ This plugin is inspired by the 11ty Inclusive Language plugin.
 
 ## Options
 
-- words: string[] | string - List of uninclusive language to avoid, passing a string only works if it is comma separated.
-- templateFormats: string[] - Which file formats should be checked __In Progress__
-- padding: number - Used to show the context of the non-inclusive language is
+- words: `string[]` - List of uninclusive language to avoid, passing a string only works if it is comma separated.
+- search: `string[]` - Limit the pages checked by passing search queries.
+- padding: `number` - Used to show the context of the non-inclusive language is.
 
 ## Example Usage
 
@@ -21,8 +21,8 @@ With all options:
 
 ```ts
 site.use(InclusiveLanguagePlugin({
-    words: [ 'poopyhead', 'dingus', 'numbnuts', 'ur mom' ],
-    templateFormats: [ 'njk', 'html' ],
+    words: [ 'dingus', 'numbnuts', 'ur mom' ],
+    search: [ 'type=post' ],
     padding: 20
 }))
 ```
@@ -32,7 +32,7 @@ To include the defaults with your own words:
 ```ts
 import { InclusiveLanguagePlugin, defaultWords } from 'path/to/plugin';
 site.use(InclusiveLanguagePlugin({
-    words: [ ...defaultWords, 'dingbat', 'loose cannon', 'pretty boi' ]
+    words: [ ...defaultWords, 'dingbat', 'loose cannon' ]
 }))
 ```
 
