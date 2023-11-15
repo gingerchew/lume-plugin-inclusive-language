@@ -1,5 +1,5 @@
 import lume from "lume/mod.ts";
-import { InclusiveLanguagePlugin } from './mod.ts';
+import { InclusiveLanguagePlugin, defaultWords } from './mod.ts';
 
 
 const site = lume({
@@ -7,6 +7,8 @@ const site = lume({
     src: './src'
 });
 
-site.use(InclusiveLanguagePlugin());
+site.use(InclusiveLanguagePlugin({
+    words: [...defaultWords, 'nincompoop']
+}));
 
 export default site;

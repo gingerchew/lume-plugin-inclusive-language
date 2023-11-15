@@ -7,3 +7,5 @@ _Clearly, you aren't looking at the obviously easy to read documentation. Of cou
 ### **However hard you make think it is, it simply isn't.**
 
 ## Try to be more inclusive :)
+
+### Don't be a nincompoop

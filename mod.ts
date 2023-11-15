@@ -59,15 +59,15 @@ function inclusiveLanguage(content: string, words:string[], padding:number) {
 
     return found;
 }
-
+export const defaultWords = "simply,obviously,basically,of course,clearly,just,everyone knows,however,easy".split(',')
 
 const defaults = {
-    words: "simply,obviously,basically,of course,clearly,just,everyone knows,however,easy",
+    words: defaultWords,
     templateFormats: ['md'],
     padding: 30,
 };
 
-function InclusiveLanguagePlugin(options?: Options) {
+function InclusiveLanguagePlugin(options?: Partial<Options>) {
     const opts = {
         ...defaults,
         ...options
@@ -123,14 +123,12 @@ function InclusiveLanguagePlugin(options?: Options) {
 
             if (found.length) {
                 /** If anything is found, list them in the console */
-                console.warn(warnIt(`Inclusive Language: (${url})`));
+                console.warn(warnIt(`${underlineIt('Inclusive Language Linter')}: (${url})`));
                 console.warn('    '+found.join('\n'+'    '));
             }
 
         })
     }
 }
-
-InclusiveLanguagePlugin.prototype.defaultWords = defaults.words;
 
 export { InclusiveLanguagePlugin }

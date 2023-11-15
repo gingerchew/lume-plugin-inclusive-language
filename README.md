@@ -30,8 +30,9 @@ site.use(InclusiveLanguagePlugin({
 To include the defaults with your own words:
 
 ```ts
+import { InclusiveLanguagePlugin, defaultWords } from 'path/to/plugin';
 site.use(InclusiveLanguagePlugin({
-    words: [ ...InclusiveLanguagePlugin.defaultWords, 'dingbat', 'loose cannon', 'pretty boi' ]
+    words: [ ...defaultWords, 'dingbat', 'loose cannon', 'pretty boi' ]
 }))
 ```
 
