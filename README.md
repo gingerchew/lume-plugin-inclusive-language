@@ -34,3 +34,9 @@ site.use(InclusiveLanguagePlugin({
     words: [ ...InclusiveLanguagePlugin.defaultWords, 'dingbat', 'loose cannon', 'pretty boi' ]
 }))
 ```
+
+## Testing
+
+You can see the results by running `deno task lume` in your terminal.
+
+*I'm not against setting up actual tests, but isn't a priority for me. If you would like to include some, open up a PR and we can talk about it :)*
