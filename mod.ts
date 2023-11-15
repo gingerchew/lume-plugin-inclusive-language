@@ -6,22 +6,35 @@ interface Options {
     padding: number;
 }
 
-const warnIt = (msg:string) => {
-    return `\u001B[33m${msg}\u001B[39m`
+const terminalOptions = {
+    UOPEN: 4,
+    UCLOSE: 24,
+    YOPEN: 33,
+    YCLOSE: 39
 }
 
-const underline = {
-    OPEN: '\u001B[4m',
-    CLOSE: '\u001B[24m'
-};
+const terminal = new Proxy(terminalOptions, {
+    get(target, key:keyof typeof terminalOptions):string {
+        return `\u001B[${target[key]}m`;
+    }
+});
+
+const warnIt = (msg:string) => {
+    const {
+        YOPEN,
+        YCLOSE
+    } = terminal;
+
+    return YOPEN + msg + YCLOSE;
+}
 
 /** Adapted from chalk */
 const underlineIt = (word: string) => {
     const {
-        OPEN,
-        CLOSE
-    } = underline;
-    return OPEN + word + CLOSE;
+        UOPEN,
+        UCLOSE
+    } = terminal;
+    return UOPEN + word + UCLOSE;
 }
 
 const makeRegex = (word:string) => new RegExp(`\\b(${word})\\b`, 'gi');
@@ -60,18 +73,27 @@ function InclusiveLanguagePlugin(options?: Options) {
         ...options
     };
 
-    opts.templateFormats = opts.templateFormats.map(fmt => fmt[0] !== '.' ? '.'+fmt : fmt);
-    return (site:Site) => {
-        let words:string[];
-        if (Array.isArray(opts.words)) {
-            words = opts.words
-        } else if (typeof opts.words === 'string') {
-            words = opts.words.split(',');
-        }
+    let words:string[];
+    if (Array.isArray(opts.words)) {
+        words = opts.words
+    } else if (typeof opts.words === 'string') {
+        words = opts.words.split(',');
+    }
+    
+    if (!Array.isArray(opts.templateFormats)) throw new Error('opts.templateFormats must be a type string[]');
 
-        if (!Array.isArray(opts.templateFormats)) throw new Error('opts.templateFormats must be a type string[]');
+    opts.templateFormats = opts.templateFormats.map(fmt => fmt[0] !== '.' ? '.'+fmt : fmt);
+
+    return (site:Site) => {
         
         site.process(opts.templateFormats, (page:Page) => {
+            
+            
+            if (page.content instanceof Uint8Array) {
+                throw new Error('inclusiveLanguage plugin does not support Uint8Array. Know how to implement it? Reach out at gingerchew/lume-plugin-inclusive-language');
+            }
+            
+            const content = page.content as string;
             
             /**
              * @TODO Fix the file format checking
@@ -86,13 +108,6 @@ function InclusiveLanguagePlugin(options?: Options) {
              */
             let shouldCheck = true;
             const url = page.src.path;
-            let content = page.content;
-            if (content instanceof Uint8Array) {
-                throw new Error('inclusiveLanguage plugin does not support Uint8Array. Know how to implement it? Reach out at gingerchew/lume-plugin-inclusive-language');
-            }
-            
-            content = content as string;
-            
             if (!url) return;
             
             for (const format of opts.templateFormats) {
