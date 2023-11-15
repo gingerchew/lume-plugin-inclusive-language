@@ -41,3 +41,11 @@ site.use(InclusiveLanguagePlugin({
 You can see the results by running `deno task lume` in your terminal.
 
 *I'm not against setting up actual tests, but isn't a priority for me. If you would like to include some, open up a PR and we can talk about it :)*
+
+## TODO
+
+- [ ] Find a better way to implement `templateFormats`
+- [ ] Give the code a second over (Could be preemptive)
+- [ ] Extract terminal utils into their own file
+- [ ] extract `inclusiveLanguage` func into its own file
+- [ ] Improve typing (could be preemptive)
