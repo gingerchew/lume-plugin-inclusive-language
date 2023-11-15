@@ -4,7 +4,7 @@ This plugin is inspired by the 11ty Inclusive Language plugin.
 
 ## Options
 
-- words: `string[]` - List of uninclusive language to avoid, passing a string only works if it is comma separated.
+- words: `string[]` - List of uninclusive language to avoid
 - search: `string[]` - Limit the pages checked by passing search queries.
 - padding: `number` - Used to show the context of the non-inclusive language is.
 
