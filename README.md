@@ -16,7 +16,6 @@ The bare minimum:
 site.use(InclusiveLanguagePlugin());
 ```
 
-
 With all options:
 
 ```ts
