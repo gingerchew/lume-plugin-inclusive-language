@@ -1,7 +1,9 @@
-import { Data, Page, PageData, Site } from "lume/core.ts";
+import { Data, Page } from "lume/core/file.ts";
+import Site from "lume/core/site.ts";
 
 import { underlineIt, warnIt } from "./utils.ts";
 import { inclusiveLanguage } from "./inclusiveLanguage.ts";
+
 
 export interface InclusiveLanguageOptions {
     words: string[];
@@ -17,28 +19,35 @@ const defaults = {
     padding: 30,
 };
 
-function process(page:Page | Data<PageData>, { words, padding }:Pick<InclusiveLanguageOptions, 'words' | 'padding'>) {
-    // There has to be a way to do this better
-    if ((page as Data<PageData>).page) {
-        const tmpPage = (page as Data<PageData>).page;
-        page = tmpPage as Page;
+function process(pages:Page[]|Data[], { words, padding }:Pick<InclusiveLanguageOptions, 'words' | 'padding'>) {
+    
+    for (let page of pages) {
+        // There has to be a way to do this better
+        if ((page as Data).page) {
+            const tmpPage = (page as Data).page;
+            page = tmpPage as Page;
+        }
+        
+        if (page.content instanceof Uint8Array) {
+            throw new Error('InclusiveLanguage plugin does not support Uint8Array. Know how to implement it? Reach out at gingerchew/lume-plugin-inclusive-language');
+        }
+        
+        if (!page.src) return;
+        
+        const content = page.content as string;
+        const url = page.src.path;
+        
+        if (!url) return;
+        
+        const found = inclusiveLanguage(content, words, padding);
+    
+        if (found.length) {
+            /** If anything is found, list them in the console */
+            console.warn(warnIt(`${underlineIt('Inclusive Language Linter')}: (${url})`));
+            console.warn('    '+found.join('\n'+'    '));
+        }
     }
-    
-    if (page.content instanceof Uint8Array) {
-        throw new Error('InclusiveLanguage plugin does not support Uint8Array. Know how to implement it? Reach out at gingerchew/lume-plugin-inclusive-language');
-    }
-    
-    const content = page.content as string;
-    const url = page.src.path;
-    if (!url) return;
-    
-    const found = inclusiveLanguage(content, words, padding);
 
-    if (found.length) {
-        /** If anything is found, list them in the console */
-        console.warn(warnIt(`${underlineIt('Inclusive Language Linter')}: (${url})`));
-        console.warn('    '+found.join('\n'+'    '));
-    }
 }
 
 
@@ -64,11 +73,12 @@ function InclusiveLanguagePlugin(options?: Partial<InclusiveLanguageOptions>) {
         if (search.length) {
             site.addEventListener('afterRender', () => {
                 for (const query of search) {
-                    site.searcher.pages(query).forEach((page) => process(page, { words, padding }));
+                    const pages = site.search.pages(query);
+                    process(pages, { words, padding });
                 }
             })
         } else {
-            site.process('*', (page:Page) => process(page, { words, padding }));
+            site.process('*', (pages) => process(pages, { words, padding }));
         }
     }
 }
